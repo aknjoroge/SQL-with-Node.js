@@ -131,8 +131,32 @@ exports.deleteUser = function (req, res, next) {
 };
 
 exports.updateUser = function (req, res, next) {
-  res.json({
-    status: "success",
-    details: "Not yet implemented",
+  let id = req.params.id;
+
+  let query = `
+     UPDATE  ${tableName} SET ${req.body.field} = '${req.body.data}'  WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+
+    console.log("TC-767", results);
+    if (results.affectedRows > 0) {
+      return res.json({
+        status: "success",
+        message: "updated",
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "Data not updated",
+    });
   });
 };
