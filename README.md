@@ -44,6 +44,7 @@
 ### \* Aggregate route
 
 - To use Aggregate Functions : POST `/api/v1/aggregate/${TABLE_NAME}`
+
   Example to run `SELECT UCASE(first_name) FROM users;`
 
   Body Object
