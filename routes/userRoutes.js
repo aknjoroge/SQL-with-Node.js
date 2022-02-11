@@ -1,6 +1,7 @@
 let express = require("express");
 
 let controller = require("../controller/usersController");
+let databaseController = require("../controller/databaseController");
 
 let routes = express.Router();
 
@@ -10,9 +11,9 @@ CRUD OPERATIONS
 =============================================
 */
 //Create
-routes.post("/", controller.addUser);
+routes.post("/", databaseController.conn, controller.addUser);
 //Read
-routes.get("/", controller.getUsers);
+routes.get("/", databaseController.conn, controller.getUsers);
 routes.get("/:id", controller.getOneUser);
 //Update
 routes.patch("/:id", controller.updateUser);

@@ -5,7 +5,8 @@ let routes = express.Router();
 
 //Test Connection
 routes.get("/", controller.testConnections);
-//Initialize database Data
+
+//INITIALIZE database Data
 routes.patch(
   "/tables/init",
   controller.conn,
