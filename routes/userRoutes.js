@@ -13,11 +13,11 @@ CRUD OPERATIONS
 //Create
 routes.post("/", databaseController.conn, controller.addUser);
 //Read
-routes.get("/", databaseController.conn, controller.getUsers);
-routes.get("/:id", controller.getOneUser);
+routes.get("/", databaseController.conn, controller.getAll);
+routes.get("/:id", databaseController.conn, controller.getOneUser);
 //Update
-routes.patch("/:id", controller.updateUser);
+routes.patch("/:id", databaseController.conn, controller.updateUser);
 //Delete
-routes.delete("/:id", controller.deletUser);
+routes.delete("/:id", databaseController.conn, controller.deleteUser);
 
 module.exports = routes;

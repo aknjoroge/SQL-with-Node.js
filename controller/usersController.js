@@ -1,8 +1,10 @@
 let fs = require("fs");
 
-exports.getUsers = function name(req, res, next) {
+let tableName = "users";
+
+exports.getAll = function name(req, res, next) {
   let query = `
-  SELECT * FROM users
+  SELECT * FROM ${tableName}
   `;
   let connection = req.SQLCONNECTION;
   connection.query(query, function (error, results, fields) {
@@ -39,7 +41,7 @@ exports.addUser = function (req, res) {
   let is_admin = req.body.is_admin;
 
   let query = `
-  INSERT INTO users (first_name, last_name, email, password, location, dept, is_admin, register_date) values 
+  INSERT INTO ${tableName} (first_name, last_name, email, password, location, dept, is_admin, register_date) values 
 ('${first_name}', '${last_name}', '${email}', '${password}','${location}', '${dept}', ${is_admin}, now());
   `;
 
@@ -70,12 +72,39 @@ exports.addUser = function (req, res) {
 };
 
 exports.getOneUser = function name(req, res, next) {
-  res.json({
-    status: "success",
+  let id = req.params.id;
+  let query = `
+  SELECT * FROM ${tableName} WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
+
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        status: "success",
+        total: results.lenth,
+        results,
+      });
+    }
+
+    return res.json({
+      status: "failed",
+      message: "No data Found",
+      results,
+    });
   });
 };
 
-exports.deletUser = function (req, res, next) {
+exports.deleteUser = function (req, res, next) {
   res.json({
     status: "success",
   });
