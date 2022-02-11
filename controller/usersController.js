@@ -77,7 +77,36 @@ exports.getOneUser = function name(req, res, next) {
   SELECT * FROM ${tableName} WHERE id=${id}
   `;
   let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+    if (results.length > 0) {
+      return res.json({
+        status: "success",
+        total: results.length,
+        results,
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "No data Found",
+      results,
+    });
+  });
+};
 
+exports.deleteUser = function (req, res, next) {
+  let id = req.params.id;
+  let query = `
+     DELETE  FROM ${tableName} WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
   connection.query(query, function (error, results, fields) {
     connection.release();
     if (error) {
@@ -88,25 +117,16 @@ exports.getOneUser = function name(req, res, next) {
       });
     }
 
-    if (results.length > 0) {
+    if (results.affectedRows > 0) {
       return res.json({
         status: "success",
-        total: results.lenth,
-        results,
+        message: "deleted",
       });
     }
-
     return res.json({
       status: "failed",
-      message: "No data Found",
-      results,
+      message: "Data not deleted | Data does not exist",
     });
-  });
-};
-
-exports.deleteUser = function (req, res, next) {
-  res.json({
-    status: "success",
   });
 };
 
