@@ -4,6 +4,8 @@ let userRoutes = require("./routes/userRoutes");
 let postRoutes = require("./routes/postsRoutes");
 let commentRoutes = require("./routes/commentsRoutes");
 let databaseRoutes = require("./routes/databaseRoute");
+let aggregateRoutes = require("./routes/aggregateRoutes");
+let queryRoutes = require("./routes/queryRoutes");
 //initialize express
 let app = express();
 
@@ -15,6 +17,9 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/database", databaseRoutes);
+app.use("/api/v1/aggregate", aggregateRoutes);
+app.use("/api/v1/aggregate", aggregateRoutes);
+app.use("/api/v1/query", queryRoutes);
 
 app.get("/", function (req, res) {
   res.json({

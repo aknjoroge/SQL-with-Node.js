@@ -14,7 +14,7 @@
 
 ### Database models from [MySQL Gist](https://gist.github.com/aknjoroge/3586b8d6692d900cf7d420a159600a31)
 
-> Forked from bradtraversy/mysql_cheat_sheet.md
+> The gist is Forked from bradtraversy/mysql_cheat_sheet.md
 
 ---
 
@@ -40,10 +40,13 @@
 - View : GET `/api/v1/aggregate/${TYPE}`
   > `/api/v1/aggregate/COUNT`
 
-### \* SETUP
+### \* Queries
 
-- Create Table : POST `/api/v1/create/table/${NAME}`
-  > `/api/v1/create/table/default/users` - predefined structure <br/> > `/api/v1/create/table/users` - define your structure
+- To run a custom query use the Endpoint
+
+```
+localhost/
+```
 
 ---
 
