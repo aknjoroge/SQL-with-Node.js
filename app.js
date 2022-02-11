@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/post", postRoutes);
-app.use("/api/v1/comment", commentRoutes);
+app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/database", databaseRoutes);
 
 app.get("/", function (req, res) {

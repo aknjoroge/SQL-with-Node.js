@@ -1,5 +1,6 @@
 let controller = require("./../controller/commentsController");
 let express = require("express");
+let databaseController = require("../controller/databaseController");
 
 let routes = express.Router();
 /*
@@ -8,13 +9,13 @@ CRUD OPERATIONS
 =============================================
 */
 //Create
-routes.post("/", controller.add);
+routes.post("/", databaseController.conn, controller.add);
 //Read
-routes.get("/", controller.getAllLocation);
-routes.get("/:id", controller.getOne);
+routes.get("/", databaseController.conn, controller.getAll);
+routes.get("/:id", databaseController.conn, controller.getOne);
 //Update
-routes.patch("/:id", controller.update);
+routes.patch("/:id", databaseController.conn, controller.update);
 //Delete
-routes.delete("/:id", controller.delete);
+routes.delete("/:id", databaseController.conn, controller.delete);
 
 module.exports = routes;

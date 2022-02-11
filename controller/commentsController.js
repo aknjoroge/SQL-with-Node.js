@@ -1,86 +1,158 @@
 let fs = require("fs");
 
-let location = fs.readFileSync(`${__dirname}/../dev-data/data/location.json`);
-let locationObjects = JSON.parse(location);
+let tableName = "comments";
 
-exports.getAllLocation = function (req, res, next) {
-  res.json({
-    status: "sucess",
-    response: locationObjects.length,
-    data: {
-      locationObjects,
-    },
+exports.getAll = function name(req, res, next) {
+  let query = `
+  SELECT * FROM ${tableName}
+  `;
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        status: "success",
+        total: results.length,
+        results,
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "No record in table",
+    });
   });
 };
 
 exports.add = function (req, res) {
-  let data = req.body;
-  let id = { id: Math.random() };
-  let newObject = Object.assign(id, data);
-  locationObjects.push(newObject);
+  let post_id = req.body.post_id;
+  let user_id = req.body.user_id;
+  let body = req.body.body;
 
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/location.json`,
-    JSON.stringify(locationObjects),
-    function (error) {
-      if (error) {
-        res.json({
-          status: "failed",
-          error,
-        });
-      } else {
-        res.status(201).json({
-          status: "success",
-          data: {
-            newObject,
-          },
-        });
-      }
+  let query = `
+  INSERT INTO ${tableName} (post_id,user_id ,body,publish_date) values 
+(${post_id}, ${user_id}, '${body}',  now());
+  `;
+
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
     }
-  );
+
+    if (results.affectedRows > 0) {
+      return res.json({
+        status: "success",
+        message: "data added",
+      });
+    }
+
+    return res.json({
+      status: "failed",
+      message: "Data not inserted",
+      results,
+    });
+  });
 };
 
 exports.getOne = function name(req, res, next) {
-  let parameter = req.params;
-  let data = locationObjects.find(function (element) {
-    return element.id == parameter.id;
-  });
-  res.json({
-    status: "success",
-    data,
+  let id = req.params.id;
+  let query = `
+  SELECT * FROM ${tableName} WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+    if (results.length > 0) {
+      return res.json({
+        status: "success",
+        total: results.length,
+        results,
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "No data Found",
+      results,
+    });
   });
 };
 
 exports.delete = function (req, res, next) {
   let id = req.params.id;
-
-  let data = locationObjects.filter(function (element) {
-    return element.id != id;
-  });
-
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/location.json`,
-    JSON.stringify(data),
-    function (err) {
-      if (err) {
-        res.json({
-          status: "failed",
-          error,
-        });
-      } else {
-        res.status(204).json({
-          status: "success",
-        });
-      }
+  let query = `
+     DELETE  FROM ${tableName} WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
     }
-  );
+
+    if (results.affectedRows > 0) {
+      return res.json({
+        status: "success",
+        message: "deleted",
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "Data not deleted | Data does not exist",
+    });
+  });
 };
 
 exports.update = function (req, res, next) {
   let id = req.params.id;
 
-  res.json({
-    status: "success",
-    details: "Not yet implemented",
+  let query = `
+     UPDATE  ${tableName} SET ${req.body.field} = '${req.body.data}'  WHERE id=${id}
+  `;
+  let connection = req.SQLCONNECTION;
+  connection.query(query, function (error, results, fields) {
+    connection.release();
+    if (error) {
+      return res.json({
+        status: "failed",
+        message: "Unable to run query",
+        error: error.sqlMessage,
+      });
+    }
+
+    console.log("TC-767", results);
+    if (results.affectedRows > 0) {
+      return res.json({
+        status: "success",
+        message: "updated",
+      });
+    }
+    return res.json({
+      status: "failed",
+      message: "Data not updated",
+    });
   });
 };
