@@ -61,12 +61,6 @@ http://localhost:2000/api/v1/aggregate/users
 
 ---
 
-### \* Queries
-
-- To run a custom query : `/api/v1/query`
-
----
-
 ## Install
 
 1. Open Terminal
