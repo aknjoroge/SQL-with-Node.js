@@ -1,0 +1,24 @@
+{
+  "name": "unihomes-real-estate",
+  "version": "1.0.0",
+  "description": "Online booking sytems for universities",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aknjoroge/uniHomes.git"
+  },
+  "author": "Alexander Karanja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aknjoroge/uniHomes/issues"
+  },
+  "homepage": "https://github.com/aknjoroge/uniHomes#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.12"
+  }
+}
